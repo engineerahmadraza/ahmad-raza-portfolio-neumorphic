@@ -1,0 +1,388 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   DESIGN TOKENS — Neumorphic Soft-UI System
+   Base palette per spec: Cloud (#F4F5F8) / Slate (#3E4256)
+   Accent: Royal Blue — chosen because it's the one accent hue that sits in
+   harmony with a cool blue-gray neumorphic base rather than fighting it,
+   and it covers control-systems / MATLAB / AI work.
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --bg: #F4F5F8;
+  --bg-elevated: #FAFAFB;
+  --surface: #F4F5F8;
+  --track: #D8DCE8;
+
+  /* Ink */
+  --ink: #2D3142;
+  --ink-soft: #5B5F78;
+  --ink-faint: #B8BCC7;
+  --border-soft: #E4E7F0;
+
+  /* Accent — Lime (Control Systems / Featured, per brand doc) */
+  --accent: #C8F000;
+  --accent-hover: #B6DD00;
+  --accent-light: #F3FFD6;
+  --accent-ink: #14170A;
+  /* Darker text-safe variant — raw lime fails contrast as small text on white */
+  --accent-text: #5C7A00;
+
+  /* Neumorphic shadow pair */
+  --shadow-d: 0, 0, 0;
+  --shadow-d-op: 0.12;
+  --shadow-l: 255, 255, 255;
+  --shadow-l-op: 0.9;
+
+  --radius-btn: 16px;
+  --radius-card: 20px;
+  --radius-input: 14px;
+  --radius-img: 24px;
+
+  --font-display: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+.dark {
+  --bg: #3E4256;
+  --bg-elevated: #40455C;
+  --surface: #3E4256;
+  --track: #31364A;
+
+  --ink: #F4F5FA;
+  --ink-soft: #CDD0DE;
+  --ink-faint: #8A8FA3;
+  --border-soft: #4A4F68;
+
+  --accent: #C8F000;
+  --accent-hover: #B6DD00;
+  --accent-light: #2A3320;
+  --accent-ink: #14170A;
+  --accent-text: #D7F94D;
+
+  --shadow-d: 0, 0, 0;
+  --shadow-d-op: 0.35;
+  --shadow-l: 255, 255, 255;
+  --shadow-l-op: 0.08;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 96px;
+}
+
+body {
+  background-color: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+::-webkit-scrollbar { width: 10px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb {
+  background: var(--track);
+  border-radius: 10px;
+  border: 2px solid var(--bg);
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Visible keyboard focus */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* ==========================================================================
+   NEUMORPHIC SURFACE UTILITIES
+   Dual soft shadow: light source top-left. Elements are carved from the
+   same-color surface, not painted a different color.
+   ========================================================================== */
+
+.neu {
+  background: var(--surface);
+  border-radius: var(--radius-card);
+  box-shadow:
+    7px 7px 14px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -7px -7px 14px rgba(var(--shadow-l), var(--shadow-l-op));
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.neu-sm {
+  background: var(--surface);
+  border-radius: var(--radius-input);
+  box-shadow:
+    4px 4px 8px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -4px -4px 8px rgba(var(--shadow-l), var(--shadow-l-op));
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.neu-lg {
+  background: var(--surface);
+  border-radius: 28px;
+  box-shadow:
+    12px 12px 28px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -12px -12px 28px rgba(var(--shadow-l), var(--shadow-l-op));
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.neu-inset {
+  background: var(--surface);
+  border-radius: var(--radius-input);
+  box-shadow:
+    inset 5px 5px 10px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -5px -5px 10px rgba(var(--shadow-l), var(--shadow-l-op));
+}
+
+.neu-inset-sm {
+  background: var(--surface);
+  border-radius: 10px;
+  box-shadow:
+    inset 3px 3px 6px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -3px -3px 6px rgba(var(--shadow-l), var(--shadow-l-op));
+}
+
+.neu-circle {
+  background: var(--surface);
+  border-radius: 999px;
+  box-shadow:
+    6px 6px 12px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -6px -6px 12px rgba(var(--shadow-l), var(--shadow-l-op));
+}
+
+/* Interactive button: raised, presses inward on click */
+.neu-btn {
+  background: var(--surface);
+  border-radius: var(--radius-btn);
+  box-shadow:
+    6px 6px 12px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -6px -6px 12px rgba(var(--shadow-l), var(--shadow-l-op));
+  transition: box-shadow 0.15s ease, transform 0.15s ease;
+  cursor: pointer;
+}
+.neu-btn:hover {
+  box-shadow:
+    4px 4px 8px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -4px -4px 8px rgba(var(--shadow-l), var(--shadow-l-op));
+}
+.neu-btn:active {
+  box-shadow:
+    inset 4px 4px 8px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -4px -4px 8px rgba(var(--shadow-l), var(--shadow-l-op));
+  transform: scale(0.98);
+}
+
+/* Accent-filled raised button (CTA) */
+.neu-btn-accent {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-radius: var(--radius-btn);
+  box-shadow:
+    6px 6px 14px rgba(200, 240, 0, 0.3),
+    -4px -4px 10px rgba(255, 255, 255, 0.5);
+  transition: box-shadow 0.15s ease, transform 0.15s ease, background 0.2s ease;
+  cursor: pointer;
+}
+.dark .neu-btn-accent {
+  box-shadow:
+    6px 6px 14px rgba(0, 0, 0, 0.4),
+    -4px -4px 10px rgba(255, 255, 255, 0.05);
+}
+.neu-btn-accent:hover {
+  background: var(--accent-hover);
+  transform: translateY(-1px);
+}
+.neu-btn-accent:active {
+  transform: scale(0.98) translateY(0);
+}
+
+/* Text field — inset well */
+.neu-field {
+  background: var(--surface);
+  border: none;
+  border-radius: var(--radius-input);
+  box-shadow:
+    inset 4px 4px 8px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -4px -4px 8px rgba(var(--shadow-l), var(--shadow-l-op));
+  color: var(--ink);
+  transition: box-shadow 0.2s ease;
+}
+.neu-field:focus {
+  box-shadow:
+    inset 3px 3px 6px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -3px -3px 6px rgba(var(--shadow-l), var(--shadow-l-op)),
+    0 0 0 2px var(--accent);
+  outline: none;
+}
+.neu-field::placeholder {
+  color: var(--ink-faint);
+}
+
+/* Hover lift for cards */
+.neu-hover-lift:hover {
+  transform: translateY(-4px);
+}
+
+/* ==========================================================================
+   THEME TOGGLE — pixel-accurate recreation of the reference switch
+   ========================================================================== */
+
+.neu-toggle-track {
+  position: relative;
+  width: 120px;
+  height: 52px;
+  background: var(--track);
+  border-radius: 999px;
+  box-shadow:
+    inset 5px 5px 10px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -5px -5px 10px rgba(var(--shadow-l), var(--shadow-l-op));
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.neu-toggle-knob {
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #FFFFFF;
+  box-shadow:
+    3px 3px 6px rgba(0, 0, 0, 0.18),
+    -2px -2px 5px rgba(255, 255, 255, 0.7),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.9);
+}
+
+.dark .neu-toggle-knob {
+  background: #6A6F86;
+  box-shadow:
+    3px 3px 8px rgba(0, 0, 0, 0.45),
+    -1px -1px 4px rgba(255, 255, 255, 0.06),
+    inset 1px 1px 2px rgba(255, 255, 255, 0.15);
+}
+
+.neu-toggle-label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 1.25;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+  transition: color 0.3s ease, opacity 0.3s ease;
+  text-align: center;
+  opacity: 0.6;
+}
+
+.neu-toggle-label.active {
+  color: var(--ink);
+  opacity: 1;
+}
+
+/* ==========================================================================
+   TYPOGRAPHY HELPERS
+   ========================================================================== */
+
+.eyebrow {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.78rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-text);
+}
+
+.link-accent {
+  color: var(--accent-text);
+}
+
+.display-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.text-soft { color: var(--ink-soft); }
+.text-faint { color: var(--ink-faint); }
+
+/* Chip / pill */
+.neu-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow:
+    3px 3px 6px rgba(var(--shadow-d), var(--shadow-d-op)),
+    -3px -3px 6px rgba(var(--shadow-l), var(--shadow-l-op));
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+}
+
+/* Divider */
+.neu-divider {
+  height: 1px;
+  background: var(--border-soft);
+  border: none;
+}
+
+/* Skill / progress track */
+.neu-track {
+  height: 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  box-shadow:
+    inset 3px 3px 6px rgba(var(--shadow-d), var(--shadow-d-op)),
+    inset -3px -3px 6px rgba(var(--shadow-l), var(--shadow-l-op));
+  overflow: hidden;
+}
+
+.neu-track-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--accent-hover));
+}
+
+/* Ambient blobs — very soft, low opacity, no neon */
+.ambient-blob {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(90px);
+  pointer-events: none;
+  opacity: 0.35;
+}
+.dark .ambient-blob { opacity: 0.18; }
